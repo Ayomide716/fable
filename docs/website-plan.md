@@ -71,8 +71,43 @@ liquid-glass materials, Spline-designed 3D elements and a deliberate visual hier
 - `dickwu/apple-design-skill`: glass rules (already summarised in docs/glass-design-guide.md).
 - Codrops tutorials (liquid glass grid, glass torus text warp), drei docs, Spline runtime README.
 
-## 7. Open decisions (needed before Phase 1)
-- What the site is for, who it's for, and the one feeling it should leave.
-- Brand name, copy and any assets (logo, product, photos).
-- Spline: do you have an account / scenes, or should I start from code-built objects?
-- New repository for the site, or a folder in this one.
+## 7. Brief (decided)
+- **Who**: Famoyegun Ayomide, fullstack product engineer.
+- **Goal**: win clients. One action: **email**.
+- **Proof**: no case studies yet, so **the site itself is the showcase**.
+- **Feeling**: chosen for conversion: *calm confidence*. Premium and precise, not chaotic.
+  Visitors should think "this person ships flawless work" within 5 seconds.
+- **Reference**: Lusion (craft level, physicality, playfulness), not its look.
+- **3D source**: hero forms built in code; community Spline scenes / free models for extras,
+  only with licences that allow it.
+- **Repo**: this repo, cleaned out.
+
+## 8. Creative concept: "Liquid → Solid"
+**Big idea:** a product engineer turns fluid ideas into solid, shipped products. The site
+shows that literally: one liquid-glass object starts as a wobbling droplet and, as you
+scroll, *solidifies* step by step into a precise, faceted crystal. The same object, the
+whole way down. It is the brand, the story and the proof of skill at once.
+
+### Story (scroll)
+| # | Section | The object | Message | Conversion job |
+|---|---|---|---|---|
+| 0 | Loader (< 2 s) | a drop fills with liquid as assets load | — | feel premium from frame 1 |
+| 1 | Hero | liquid glass droplet; the headline sits *behind* it and bends through the glass; cursor pushes the liquid | "I turn ideas into products that ship." + name, role, availability | value in 5 s, Email CTA visible |
+| 2 | What I do | liquid starts to organise into layers | 3 capabilities: product thinking, interface engineering, systems & backend | clarity |
+| 3 | Process (pinned) | 4 morphs: **Idea** (liquid) → **Design** (glass panels) → **Build** (crystal lattice) → **Launch** (polished crystal) | how working together goes | reduce risk |
+| 4 | Proof: "This site is the case study" | crystal under X-ray: toggle shows the wireframe and the stack | live stats measured in the visitor's browser: FPS, load time, page weight, tech stack | credibility without case studies |
+| 5 | Stack | glass tiles of the tools orbiting the crystal | what I build with | fit check |
+| 6 | Contact | the crystal becomes a glass sphere you can grab and spin | "Let's build something people remember." Copy-email button + mailto, reply-time promise | the conversion |
+
+The Email pill stays in the floating glass nav the whole time (3 CTAs total: nav, hero, contact).
+
+### Visual system
+- **Colour**: near-black graphite `#0B0B0F`, warm off-white `#F2F0EB`, greys between.
+  One accent, used **only** for the email action: signal lime `#C6FF3D`.
+- **Type**: Geist (headings, body, UI) + Instrument Serif *italic* for one emphasis word per
+  headline. Display sizes 72–160 px with tight tracking.
+- **Glass**: the hero object (real refraction, chromatic edges) + floating nav, cursor lens
+  and CTA pills. Nothing else.
+- **Motion**: slow and weighty for the object (spring physics), fast and crisp for UI.
+  Every transition follows the object.
+- **Hierarchy per screen**: 1) the object, 2) the headline, 3) the CTA. Everything else is quiet.
