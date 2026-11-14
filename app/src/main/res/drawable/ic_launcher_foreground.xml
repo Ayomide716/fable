@@ -4,13 +4,8 @@
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
-    <!-- A calm ring with a single dot: "one breath". -->
-    <path
-        android:fillColor="#00000000"
-        android:strokeColor="#FFF2F2F2"
-        android:strokeWidth="4"
-        android:pathData="M54,32 A22,22 0 1,1 53.99,32 Z" />
-    <path
-        android:fillColor="#FF9FD8B5"
-        android:pathData="M54,48 A6,6 0 1,1 53.99,48 Z" />
+    <path android:fillColor="#59FFFFFF" android:strokeColor="#E6FFFFFF" android:strokeWidth="2.5"
+        android:pathData="M54,30 A24,24 0 1,1 53.99,30 Z" />
+    <path android:fillColor="#00000000" android:strokeColor="#FFFFFFFF" android:strokeWidth="4" android:strokeLineCap="round"
+        android:pathData="M54,42 L54,54 L62,59" />
 </vector>

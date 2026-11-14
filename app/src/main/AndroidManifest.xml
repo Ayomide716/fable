@@ -2,12 +2,19 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
+    <uses-feature android:name="android.software.live_wallpaper" android:required="false" />
 
     <!-- Android 11+: lets the launcher see every app that has a launcher icon. -->
     <queries>
         <intent>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.DIAL" />
+        </intent>
+        <intent>
+            <action android:name="android.media.action.STILL_IMAGE_CAMERA" />
         </intent>
     </queries>
 
@@ -25,8 +32,9 @@
             android:exported="true"
             android:launchMode="singleTask"
             android:resumeWhilePausing="true"
-            android:stateNotNeeded="true"
             android:screenOrientation="portrait"
+            android:stateNotNeeded="true"
+            android:theme="@style/Theme.Fable.Home"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,17 +45,23 @@
         </activity>
 
         <activity
-            android:name=".PauseActivity"
+            android:name=".CustomizeActivity"
             android:excludeFromRecents="true"
-            android:exported="false"
-            android:noHistory="true"
-            android:screenOrientation="portrait"
-            android:taskAffinity="" />
+            android:exported="true"
+            android:label="@string/customize"
+            android:screenOrientation="portrait" />
 
-        <activity
-            android:name=".SettingsActivity"
-            android:excludeFromRecents="true"
-            android:exported="false"
-            android:label="@string/settings" />
+        <service
+            android:name=".GlassClockWallpaper"
+            android:exported="true"
+            android:label="@string/wallpaper_name"
+            android:permission="android.permission.BIND_WALLPAPER">
+            <intent-filter>
+                <action android:name="android.service.wallpaper.WallpaperService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.service.wallpaper"
+                android:resource="@xml/glass_clock_wallpaper" />
+        </service>
     </application>
 </manifest>

@@ -1,27 +1,27 @@
-# Fable — a mindful Android launcher
+# Fable — glass clock launcher for Android
 
-A minimalist home screen that helps you use your phone on purpose.
+A huge glass clock for your lock screen, plus a matching glass home screen.
 
 ## Features
-- **Calm home screen:** clock, date and up to 7 favourite apps as plain text.
-- **App drawer:** swipe up for an A–Z list with instant search. One match opens automatically.
-- **Mindful pause:** mark apps as *distracting* and Fable shows a breathing countdown
-  ("You've reached for Instagram 6 times today") before opening them.
-- **Mindful skips counter** on the home screen for each time you chose *Not now*.
-- **Long-press any app:** add to home, move up, mark distracting, app info, uninstall.
-- **Settings:** long-press an empty part of the home screen.
+- **Glass lock-screen clock** (live wallpaper): a huge clock that looks like glass, with the
+  date and battery. Shows on the lock screen; the home screen stays clean.
+- **Customize**: Glass or Solid, clear ↔ frosted, clock height (stretch), 4 fonts,
+  6 tints and 4 wallpapers, with a live preview.
+- **Glass home screen** (launcher): glass clock, app grid, glass search pill and glass dock.
+- **App drawer**: swipe up or tap Search. Long-press any app to add it to the home
+  screen or dock, open app info or uninstall.
 
-## Getting the APK
-Every push builds the app with GitHub Actions:
-1. Open the repository's **Actions** tab and pick the latest **Build APK** run.
-2. Download **fable-launcher-apk** under *Artifacts* and unzip it.
-3. Copy the `.apk` to your Android phone and open it (allow "install unknown apps").
-4. Press Home and choose **Fable**, or use *Settings → Set Fable as default home app*.
+Design rules are in [docs/glass-design-guide.md](docs/glass-design-guide.md).
 
-Requires Android 8.0+.
+## Install
+Download the latest APK from the repository's **Releases** page, open it on your Android
+phone (allow "install unknown apps"), then:
+1. Open Fable and tap **Set up the glass lock-screen clock** → **Set wallpaper** →
+   choose **Home and lock screens**.
+2. Press Home and pick **Fable** to use the glass home screen.
 
-## Building locally
-```
-./gradlew assembleRelease
-```
-Needs the Android SDK (set `ANDROID_HOME`) and JDK 17.
+Requires Android 8.0+. Some phones draw their own small clock on the lock screen as well.
+
+## Fonts
+Outfit, Unbounded, Anton and Big Shoulders Display, all under the SIL Open Font License
+(see app/src/main/assets/fonts/OFL.txt).
