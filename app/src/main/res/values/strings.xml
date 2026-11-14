@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Fable</string>
+    <string name="settings">Fable settings</string>
+    <string name="search_hint">Search apps</string>
+    <string name="swipe_hint">swipe up for apps · hold for settings</string>
+    <string name="empty_favorites">Long-press an app in the drawer\nto add it here.</string>
+    <string name="not_now">Not now</string>
+    <string name="breathe">Take a breath.</string>
+</resources>
