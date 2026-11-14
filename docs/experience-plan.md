@@ -229,3 +229,11 @@ and phone size) so you can see the look before we build. Then design the crystal
 and panes in Spline and bring them into the hero prototype.
 
 Storyboard (key frames, desktop + phone): https://claude.ai/artifact/9CBRpXr8Q3h9HBQDUXYvfp
+
+## 11. Spline assets
+- **Crystal (v1):** https://app.spline.design/file/9fb9c5cd-7445-4143-bf35-ee4b68344d9b
+  Hexagonal crystal with an antiprism middle (the lower ring is turned 30°), 24 flat
+  facets, ~220 × 440 units, tilted 12° / -8°. Object name `Crystal`. The material, the
+  lights and the `Light Strip` refraction target are only there for reviewing it in
+  Spline. On the site the crystal is exported as GLB and gets our own glass material in
+  the R3F scene.
