@@ -1,0 +1,139 @@
+:root {
+  --bg: #0b0b0f;
+  --ink: #f2f0eb;
+  --ink-2: #c9c6c0;
+  --ink-3: #8c8a86;
+  --line: rgba(242, 240, 235, 0.12);
+  --cta: #c6ff3d;
+  --cta-ink: #0b0b0f;
+  --sans: 'Geist', system-ui, sans-serif;
+  --mono: 'Geist Mono', ui-monospace, monospace;
+  --serif: 'Instrument Serif', Georgia, serif;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --gutter: clamp(16px, 4.4vw, 64px);
+}
+
+* { box-sizing: border-box; }
+html { background: var(--bg); color-scheme: dark; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+::selection { background: rgba(198, 255, 61, 0.25); }
+a { color: inherit; }
+
+/* The canvas sits behind everything and never takes the pointer. */
+.stage { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+.stage canvas { display: block; }
+main, .nav { position: relative; z-index: 1; }
+
+/* Glass is only for the floating controls (plan rule 7). */
+.glass {
+  background: rgba(242, 240, 235, 0.06);
+  border: 1px solid var(--line);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 12px 32px rgba(0, 0, 0, 0.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  backdrop-filter: blur(20px) saturate(1.4);
+}
+
+.nav {
+  position: fixed;
+  top: calc(20px + env(safe-area-inset-top, 0px));
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(1120px, calc(100vw - 24px));
+  height: 60px;
+  padding: 0 8px 0 24px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  border-radius: 999px;
+  z-index: 20;
+}
+.brand { font-weight: 600; font-size: 17px; letter-spacing: -0.02em; text-decoration: none; margin-right: auto; }
+.links { display: flex; gap: 28px; font-size: 14px; }
+.links a { color: #b9b6b0; text-decoration: none; transition: color 0.25s var(--ease); }
+.links a:hover { color: var(--ink); }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  padding: 0 20px;
+  border-radius: 999px;
+  font: 600 14px var(--sans);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease);
+}
+.btn-cta { background: var(--cta); color: var(--cta-ink); }
+.btn-cta:hover { transform: translateY(-1px); box-shadow: 0 0 0 6px rgba(198, 255, 61, 0.12); }
+.btn-ghost { border: 1px solid rgba(242, 240, 235, 0.18); color: var(--ink); font-weight: 400; }
+.btn-lg { height: 52px; padding: 0 26px; font-size: 15px; }
+
+.eyebrow { font: 400 12px var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-3); }
+h1, h2 { font-weight: 500; letter-spacing: -0.045em; line-height: 0.95; margin: 0; text-wrap: balance; }
+em { font-family: var(--serif); font-style: italic; font-weight: 400; letter-spacing: -0.01em; }
+p { margin: 0; line-height: 1.5; color: var(--ink-2); }
+
+/* ---------- Hero ---------- */
+.hero { position: relative; height: 100svh; min-height: 620px; }
+.hero-title {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 var(--gutter);
+  font-size: clamp(48px, 8.3vw, 120px);
+}
+.hero-title > span { max-width: 12ch; }
+/* Once the 3D headline (which bends through the glass) is drawn, the HTML one stays for screen readers. */
+.gl-ready .hero-title { clip-path: inset(50%); width: 1px; height: 1px; overflow: hidden; }
+.hero-sub { position: absolute; left: var(--gutter); bottom: 64px; width: min(420px, 40vw); display: flex; flex-direction: column; gap: 12px; }
+.hero-sub p { font-size: 19px; letter-spacing: -0.01em; }
+.hero-actions { position: absolute; right: var(--gutter); bottom: 64px; display: flex; flex-direction: column; align-items: flex-end; gap: 18px; }
+.hero-actions .row { display: flex; gap: 12px; }
+.status { display: inline-flex; align-items: center; gap: 10px; height: 34px; padding: 0 14px; border-radius: 999px; font-size: 13px; color: var(--ink-2); }
+.dot { width: 7px; height: 7px; border-radius: 50%; background: var(--ink); box-shadow: 0 0 10px rgba(242, 240, 235, 0.8); }
+.scrollcue { position: absolute; left: 0; right: 0; bottom: 24px; text-align: center; font: 400 11px var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); }
+
+/* ---------- Solidify (the first morph) ---------- */
+.solidify { position: relative; height: 320vh; }
+.beat { position: absolute; left: var(--gutter); width: min(460px, 34vw); display: flex; flex-direction: column; gap: 18px; }
+.beat h2 { font-size: clamp(40px, 5.4vw, 80px); }
+.beat-a { top: 70vh; }
+.beat-b { top: 215vh; left: auto; right: var(--gutter); }
+
+/* ---------- Contact ---------- */
+.contact { min-height: 100svh; display: flex; flex-direction: column; justify-content: center; gap: 24px; padding: 120px var(--gutter); max-width: 900px; }
+.contact h2 { font-size: clamp(44px, 6vw, 88px); }
+.contact .btn { align-self: flex-start; }
+
+/* ---------- Phone: object on top, text below ---------- */
+@media (max-width: 759px), (max-aspect-ratio: 4/5) {
+  .nav { top: calc(12px + env(safe-area-inset-top, 0px)); height: 56px; padding: 0 6px 0 18px; }
+  .links { display: none; }
+  .hero-title { align-items: flex-start; justify-content: flex-start; text-align: left; padding-top: 180px; font-size: clamp(40px, 14.9vw, 64px); }
+  .hero-sub { left: 20px; right: 20px; width: auto; bottom: auto; top: min(59svh, 520px); }
+  .hero-sub p { font-size: 17px; }
+  .hero-actions { left: 20px; right: 20px; bottom: 28px; align-items: stretch; }
+  .hero-actions .status { position: absolute; top: -66px; left: 0; align-self: flex-start; display: none; }
+  .hero-actions .row { flex-direction: column-reverse; }
+  .scrollcue { display: none; }
+  .beat, .beat-b { left: 20px; right: 20px; width: auto; }
+  .beat-a { top: 62vh; }
+  .beat-b { top: 230vh; }
+  .contact .btn { align-self: stretch; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { scroll-behavior: auto !important; }
+  .btn { transition: none; }
+}
