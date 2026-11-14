@@ -7,7 +7,7 @@ cohesive piece. Builds on the brief and concept in [website-plan.md](website-pla
 
 ## 1. The one sentence
 > You arrive at a drop of liquid glass. You scroll, and it **sets** into a crystal in front
-> of you. At the end, it's solid enough to pick up, and it points you to the email.
+> of you. At the end, it's solid enough to pick up, and it points you to the "start a project" form.
 
 Everything below serves that sentence. If a detail doesn't, it gets cut.
 
@@ -46,8 +46,8 @@ These are what make it feel like one designed object, not a stack of sections.
    The response tells you its state: jelly ripple at the top, stiff wobble mid-page,
    a crisp tilt and glint at the bottom. Visitors learn one interaction and feel the
    story through it.
-4. **One accent, one job.** Signal lime `#C6FF3D` only ever means "email". At the end the
-   crystal focuses light into a lime point that lands on the Copy-email button, so the
+4. **One accent, one job.** Signal lime `#C6FF3D` only ever means "start a project". At the
+   end the crystal focuses light into a lime point that lands on the Send button, so the
    3D literally points at the conversion.
 5. **One timing system.** Object: spring physics, slow and weighty. UI: fast and crisp
    (150/250/400/600 ms, `cubic-bezier(0.16,1,0.3,1)`). Scroll drives the object;
@@ -59,7 +59,7 @@ These are what make it feel like one designed object, not a stack of sections.
    glass on the "What I do" cards and proof stats). No glass on glass.
 
 ## 4. The flow, beat by beat
-Total length ≈ 8 screen heights on desktop. Each beat lists what you see, what you can do,
+Total length ≈ 7 screen heights on desktop. Each beat lists what you see, what you can do,
 what the object is doing, how it hands off to the next beat, and its one "wow".
 Rule: **max one wow per section.**
 
@@ -72,9 +72,14 @@ Rule: **max one wow per section.**
 - **Wow:** the loader becomes the site.
 - **Fallback:** if loading takes > 4 s, show the hero text and let the 3D fade in later.
 
-### Beat 1: Hero, "I turn ideas into products that *ship.*"
+### Beat 1: Hero, "You bring the idea. I *ship* the product."
 - **See:** headline set huge, *behind* the droplet, so the letters bend through the glass.
-  Name, role, "Available for new projects" status pill, Email CTA + "How I work".
+  Sub-line: "Fullstack product engineer. Design, frontend and backend from one person,
+  so you launch in weeks, not quarters." Name, "Available for new projects" status pill,
+  lime **Start a project** CTA + "How I work".
+- **Why this line:** it speaks to the visitor first ("you"), says the outcome in six
+  words, and mirrors the concept (fluid idea in, solid product out). "Ship" is the
+  italic serif word.
 - **Do:** move the cursor; the droplet bulges away and ripples, the text behind it warps
   with it. On phones: tilt the device (with permission) or touch-drag.
 - **Object:** liquid, wobbling slowly on its own (breathing, ~4 s loop). Wavy caustics on
@@ -82,7 +87,7 @@ Rule: **max one wow per section.**
 - **Hand-off:** scroll cue "Scroll · watch it take shape". First scroll: the headline
   lifts away, the droplet thickens slightly (viscosity goes up).
 - **Wow:** the headline refracting through real glass, reacting to your hand.
-- **5-second test:** who, what, and the email button must be readable before anyone
+- **5-second test:** who, what, and the Start a project button must be readable before anyone
   touches the object.
 
 ### Beat 2: What I do, "One engineer. The *whole* product."
@@ -113,34 +118,41 @@ Rule: **max one wow per section.**
 ### Beat 4: Proof, "This site is the *case study.*"
 - **See:** copy left, crystal right. An **X-ray** toggle and four live stats measured on
   the visitor's device: frame rate, load time, renderer, quality tier.
-- **Do:** flip X-ray: the glass drains to a glowing wireframe with labels for the parts
-  of the stack ("shader", "physics", "scroll timeline"). Flip back: it re-fills.
+- **Do:** flip X-ray: the glass drains to a glowing wireframe, and labels pin to its parts
+  naming the real tools behind them ("Next.js · routing", "Three.js · glass shader",
+  "GSAP · scroll timeline", "Node + Postgres · contact form"). This replaces a separate
+  Stack section: the tools are shown *working*, not listed. Flip back: it re-fills.
 - **Object:** now solid. The cursor tilts it rather than deforming it.
 - **Wow:** X-ray. It turns the effect into evidence.
 
-### Beat 5: Stack
-- **See:** a short line, "What I build with", and tool names.
-- **Object:** small frosted (not clear) tiles with tool marks orbit the crystal in a slow
-  ring, catching its light. Hover/tap a tile: it comes forward and shows one line of
-  how you use it.
-- **Note:** keep this short (one screen). It's a fit check, not a section to linger in.
-- **Wow:** none needed; it's a breather before the ending. Restraint is the design.
-
-### Beat 6: Contact, "Let's build something people *remember.*"
-- **See:** headline, one line ("Tell me about the idea. I'll reply with how I'd build it."),
-  the email address and a lime **Copy email** button. Reply-time promise. Footer.
+### Beat 5: Contact, "Let's build something people *remember.*"
+- **See:** headline, then a short form (three fields, one screen, no scrolling):
+  1. **What are you building?** one or two lines (required)
+  2. **Your email** (required)
+  3. **When?** tap one chip: *ASAP* · *1–3 months* · *Just exploring* (optional)
+  Lime **Send** button, the reply-time promise under it ("I reply within 1 working day"),
+  and a quiet "or copy my email" link for people who prefer their own mail app. Footer.
+- **Why a real form:** it sends straight from the page (a small server function on Vercel
+  that emails you), so nobody is thrown out to a mail app, which is where most mailto
+  clicks are lost. Few fields, typed answers kept if they leave and come back, clear
+  errors next to the field, works without JavaScript as a fallback.
 - **Object:** the crystal rounds into a polished glass sphere, the final solid form. Light
-  passing through it focuses into a lime point that lands on the Copy-email button.
+  passing through it focuses into a lime point that lands on the Send button.
 - **Do:** grab and spin the sphere (hint: "Drag to spin"). It has real weight and
-  friction. Click Copy: the button confirms "Copied", the sphere gives one bright
-  "clink" glint (and a tone if sound is on).
-- **Wow:** the object you watched form is now solid in your hand, and it points at the email.
+  friction. Press Send: the sphere gives one bright "clink" glint (and a tone if sound
+  is on), and the form is replaced by "Got it. I'll reply within 1 working day."
+- **Wow:** the object you watched form is now solid in your hand, and it points at the form.
 
 ### Global layer (always there)
-- **Floating glass nav:** brand left, section links, Email pill right. Hides on scroll down,
+- **Floating glass nav:** brand left, section links, sound toggle, lime "Start a project"
+  pill right (jumps to the form). Hides on scroll down,
   returns on scroll up.
 - **Cursor lens:** a small glass lens that magnifies slightly; grows over links, becomes a
   "drag" ring over the object. Hidden on touch devices.
+- **Sound (off by default):** a small waveform icon in the nav turns it on; the choice is
+  remembered. Low and quiet: a soft liquid hum at the top, a drip when you push the
+  droplet, glass tones at each process stage, a clean "clink" on Send. Under 300 KB of
+  audio, loaded only after it's switched on, muted whenever the tab is hidden.
 - **Section progress:** a hairline on the right edge that fills as you scroll, ticks at
   each beat.
 - **Details others skip:** tab title changes when you leave ("Still here when you're
@@ -154,17 +166,17 @@ Rule: **max one wow per section.**
 | Layer bands | 2 | code (inner layers / shader) | subtle, inside the drop |
 | Glass panes | 3 (Design) | **Spline** → GLB | design the pane set and its grid layout visually |
 | Crystal lattice | 3 (Build), 4 X-ray | **Spline** → GLB | also gives the wireframe for X-ray |
-| Faceted crystal | 3 (Launch)–5 | **Spline** → GLB | the "hero" final form; spend design time here |
-| Glass sphere | 6 | code | simple primitive, physics-driven spin |
-| Stack tiles | 5 | **Spline** → GLB (one tile, instanced) | frosted, not clear |
+| Faceted crystal | 3 (Launch)–4 | **Spline** → GLB | the "hero" final form; spend design time here |
+| Glass sphere | 5 | code | simple primitive, physics-driven spin |
 | Floor caustics | all | code (projected texture / shader) | the second visual layer; evolves with the story |
 | Environment | all | HDRI + one key light | one lighting setup for the whole site |
 
-**Morph approach (to decide in the hero prototype):** the forms have different shapes,
-so a straight mesh blend won't work. Two options: (a) a dissolve/fill transition between
-meshes, timed so the change happens inside a bright glint; (b) a signed-distance-field
-shader that blends smoothly between shapes. Option (a) is cheaper on phones; (b) looks
-more magical. We test both on a real phone before deciding.
+**Morph approach (decided): dissolve inside a glint.** Each stage is its own mesh. At the
+moment of change a bright glint sweeps across the object, and the next form fills in
+behind it with a dissolve, then settles with a small spring. Why: it keeps 50+ fps on
+mid-range phones (where most visitors are), works with the forms designed in Spline,
+and the glint hides the swap so it reads as one object transforming. The smoother
+shape-blending shader stays as a possible desktop upgrade later, only if the budget allows.
 
 ## 6. Beauty rules
 - **Composition:** one focal point per screen, in this order: object, headline, CTA.
@@ -189,7 +201,8 @@ more magical. We test both on a real phone before deciding.
 - Interaction: touch-drag pushes the object; optional tilt in the hero.
 - Process beat: pinned with snap points at each of the four stages, so a quick swipe
   lands on a clean frame.
-- Contact: Copy email is a full-width thumb-zone button; sphere spin by swipe.
+- Contact: form fields at full width, Send button in the thumb zone, the right keyboard
+  for each field (email keyboard for email); sphere spin by swipe.
 - Target ≥ 50 fps on a mid-range Android; if it drops, quality steps down automatically.
 
 ## 8. Accessibility and calm modes
@@ -201,15 +214,14 @@ more magical. We test both on a real phone before deciding.
   and every interactive 3D moment has a normal button equivalent.
 - Contrast checked on every text-over-glass spot.
 
-## 9. Open questions for you
-1. **Sound:** include an optional sound toggle (off by default), or no sound at all?
-2. **Hero line:** keep "I turn ideas into products that *ship.*" or explore alternatives?
-3. **Stack section:** keep it, or fold the tools into the Proof X-ray labels to shorten
-   the page?
-4. **Contact:** just email, or also a short "what are you building?" form that opens a
-   pre-filled email?
-5. **Morph style:** happy for me to prototype both morph approaches (§5) and show you
-   them side by side on your phone?
+## 9. Decisions
+| Question | Decision |
+|---|---|
+| Sound | Optional, **off by default**, toggle in the nav |
+| Hero line | "You bring the idea. I *ship* the product." |
+| Stack section | **Cut.** Tools appear as X-ray labels in Proof: shorter page, more convincing |
+| Contact | **Short form** (idea, email, timing chip) sent from the page, copy-email as backup |
+| Morph | **Dissolve inside a glint** (phone-friendly); shape-blend shader only as a later desktop upgrade |
 
 ## 10. Next step
 Once you approve this flow: build a **storyboard** (one key frame per beat, at desktop
