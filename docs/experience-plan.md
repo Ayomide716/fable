@@ -237,3 +237,11 @@ Storyboard (key frames, desktop + phone): https://claude.ai/artifact/9CBRpXr8Q3h
   lights and the `Light Strip` refraction target are only there for reviewing it in
   Spline. On the site the crystal is exported as GLB and gets our own glass material in
   the R3F scene.
+- **Lattice (v1), same file:** group `Lattice`. 36 edges built as one thin tube mesh
+  (`Lattice Edges`) plus 14 node spheres. It uses exactly the crystal's vertices and
+  transform, so the Build → Launch change lines up. On the site, the same edges become the
+  X-ray wireframe.
+- **Panes (v1), same file:** group `Panes`. Five rounded glass slabs (`Pane Glass`
+  material) for the Design stage. To do: they read as grey cards rather than glass, and
+  they overlap. Next pass: lay them on a clean grid with even gaps, make them clearer, and
+  size them so they can fly into the crystal's faces.
