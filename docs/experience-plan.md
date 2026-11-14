@@ -227,3 +227,5 @@ shape-blending shader stays as a possible desktop upgrade later, only if the bud
 Once you approve this flow: build a **storyboard** (one key frame per beat, at desktop
 and phone size) so you can see the look before we build. Then design the crystal, lattice
 and panes in Spline and bring them into the hero prototype.
+
+Storyboard (key frames, desktop + phone): https://claude.ai/artifact/9CBRpXr8Q3h9HBQDUXYvfp
