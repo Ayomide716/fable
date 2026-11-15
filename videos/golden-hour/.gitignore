@@ -1,3 +1,4 @@
 .hyperframes/
 renders/work-*/
 node_modules/
+renders/.*
