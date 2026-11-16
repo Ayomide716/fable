@@ -1,0 +1,127 @@
+<!doctype html>
+<html
+  lang="en"
+  data-composition-variables='[{"id":"open-line-1","type":"string","label":"Opening line 1","default":"two rooms,"},{"id":"open-line-2","type":"string","label":"Opening line 2","default":"one wall"},{"id":"open-line-3","type":"string","label":"Opening line 3","default":"between them."}]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Two Strangers</title>
+    <script src="assets/lib/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Instrument Serif";
+        font-style: italic;
+        font-weight: 400;
+        src: url("assets/fonts/instrument-serif-italic.woff2") format("woff2");
+      }
+      @font-face {
+        font-family: "Instrument Serif";
+        font-style: normal;
+        font-weight: 400;
+        src: url("assets/fonts/instrument-serif.woff2") format("woff2");
+      }
+      :root {
+        --night: #1a0f14;
+        --cream: #f4e6cf;
+        --amber: #e8a04a;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: var(--night);
+      }
+      #root {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        background: var(--night);
+      }
+      #film,
+      #fx {
+        position: absolute;
+        inset: 0;
+        width: 1080px;
+        height: 1920px;
+      }
+      #film { z-index: 1; }
+      #fx { z-index: 3; pointer-events: none; }
+      .line {
+        position: absolute;
+        left: 92px;
+        width: 760px;
+        top: 230px;
+        z-index: 2;
+        text-align: left;
+        font-family: "Instrument Serif", serif;
+        font-style: italic;
+        font-weight: 400;
+        color: var(--cream);
+        font-size: 108px;
+        line-height: 1.02;
+        letter-spacing: -0.01em;
+        text-shadow:
+          0 0 28px rgba(232, 160, 74, 0.55),
+          0 2px 18px rgba(26, 15, 20, 0.6);
+      }
+      .line .row { display: block; }
+      .line .w { display: inline-block; }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="30"
+      data-width="1080"
+      data-height="1920"
+    >
+      <canvas id="film" width="1080" height="1920" data-layout-ignore></canvas>
+
+      <!-- Opening line: on screen from frame 0 (the thumbnail), fades as the song pauses. -->
+      <div id="open" class="line clip" data-start="0" data-duration="3.5" data-track-index="1" data-layout-allow-overlap>
+        <div id="open-in">
+          <span class="row" id="open-a" data-var-text="open-line-1">two rooms,</span>
+          <span class="row" id="open-b" data-var-text="open-line-2">one wall</span>
+          <span class="row" id="open-c" data-var-text="open-line-3">between them.</span>
+        </div>
+      </div>
+
+      <!-- Closing line: one word group per beat from 26.12 s, held to the fade. -->
+      <div id="close" class="line clip" data-start="26" data-duration="4" data-track-index="2" data-layout-allow-overlap>
+        <span class="row"><span class="w" id="w1">this is</span> <span class="w" id="w2">all</span></span>
+        <span class="row"><span class="w" id="w3">you</span> <span class="w" id="w4">get</span></span>
+      </div>
+
+      <canvas id="fx" width="1080" height="1920" data-layout-ignore></canvas>
+    </div>
+
+    <script src="assets/film.js"></script>
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+      // Opening line drifts up slowly, then dissolves as the song pauses (2.57 s).
+      tl.fromTo("#open-in", { y: 0, opacity: 1, filter: "blur(0px)" }, { y: -18, duration: 2.57, ease: "none" }, 0);
+      tl.fromTo("#open-in", { opacity: 1, filter: "blur(0px)" }, { opacity: 0, filter: "blur(14px)", duration: 0.8, ease: "power2.in", immediateRender: false }, 2.6);
+
+      // Closing words land on the beats: 26.12, 26.98, 27.86, 28.72 (times local to the clip start at 26).
+      [["#w1", 0.12], ["#w2", 0.98], ["#w3", 1.86], ["#w4", 2.72]].forEach(([id, at]) => {
+        tl.fromTo(id, { opacity: 0, y: 26, filter: "blur(10px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.45, ease: "power3.out" }, 26 + at);
+      });
+      // Everything fades to warm dark on the last hit (29.60).
+      tl.fromTo("#close", { opacity: 1 }, { opacity: 0, duration: 0.38, ease: "power1.in", immediateRender: false }, 29.6);
+
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,5 @@
+.hyperframes/
+renders/work-*/
+node_modules/
+renders/.*
+renders/two-strangers-master.mp4
