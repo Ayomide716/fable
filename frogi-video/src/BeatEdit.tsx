@@ -41,30 +41,30 @@ const SHOTS: Shot[] = [
   { clip: 'c3', src: 4.4, at: 0, fx: ['bw', 'slow'], rate: 0.7 },
   // DROP: colour bursts in (hard cuts on the big hits, transitions in between)
   { clip: 'c4', src: 9.6, at: b(0), fx: ['flash', 'rgb', 'shake', 'punch'] },
-  { clip: 'c2', src: 3.0, at: b(1), tr: 'slideR' },
+  { clip: 'c2', src: 3.0, at: b(1), fx: ['punch'] },
   { clip: 'c3', src: 21.4, at: b(2), fx: ['rgb'], tr: 'zoom' },
-  { clip: 'c1', src: 6.0, at: b(3), tr: 'slideL' },
-  { clip: 'c4', src: 12.0, at: b(4), fx: ['shake'], tr: 'slideUp' },
+  { clip: 'c1', src: 6.0, at: b(3), fx: ['punch'] },
+  { clip: 'c4', src: 12.0, at: b(4), fx: ['punch', 'shake'] },
   // Dip in the song: let one shot breathe
   { clip: 'c3', src: 14.2, at: b(5), fx: ['slow'], rate: 0.75, tr: 'fade' },
   // Back in
   { clip: 'c4', src: 24.0, at: b(8), fx: ['flash', 'rgb', 'shake', 'ramp'] },
-  { clip: 'c2', src: 9.0, at: b(9), tr: 'slideR' },
-  { clip: 'c3', src: 2.4, at: b(10), tr: 'spin' },
-  { clip: 'c1', src: 15.0, at: b(11), fx: ['shake'], tr: 'slideL' },
+  { clip: 'c2', src: 9.0, at: b(9), fx: ['punch'] },
+  { clip: 'c3', src: 2.4, at: b(10), fx: ['punch'] },
+  { clip: 'c1', src: 15.0, at: b(11), fx: ['punch', 'shake'] },
   { clip: 'c4', src: 28.6, at: b(12), fx: ['flash', 'rgb', 'punch'] },
-  { clip: 'c2', src: 24.0, at: b(13), tr: 'slideUp' },
-  { clip: 'c3', src: 17.8, at: b(14), fx: ['shake'], tr: 'zoom' },
-  { clip: 'c1', src: 1.5, at: b(15), tr: 'slideR' },
+  { clip: 'c2', src: 24.0, at: b(13), fx: ['punch'] },
+  { clip: 'c3', src: 17.8, at: b(14), fx: ['punch', 'shake'] },
+  { clip: 'c1', src: 1.5, at: b(15), fx: ['punch'] },
   { clip: 'c4', src: 4.6, at: b(16), fx: ['flash', 'rgb', 'ramp'] },
-  { clip: 'c2', src: 27.0, at: b(18), tr: 'slideL' },
-  { clip: 'c3', src: 7.2, at: b(19), fx: ['shake'], tr: 'spin' },
-  { clip: 'c4', src: 10.6, at: b(20), tr: 'slideUp' },
-  { clip: 'c1', src: 10.5, at: b(21), tr: 'zoom' },
+  { clip: 'c2', src: 27.0, at: b(18), fx: ['punch'] },
+  { clip: 'c3', src: 7.2, at: b(19), fx: ['punch', 'shake'] },
+  { clip: 'c4', src: 10.6, at: b(20), fx: ['punch'] },
+  { clip: 'c1', src: 10.5, at: b(21), fx: ['punch'] },
   { clip: 'c2', src: 30.0, at: b(22), fx: ['flash', 'rgb', 'ramp'] },
-  { clip: 'c3', src: 29.8, at: b(24), tr: 'slideR' },
-  { clip: 'c4', src: 20.4, at: b(25), fx: ['shake'], tr: 'slideL' },
-  { clip: 'c1', src: 18.0, at: b(26), tr: 'slideUp' },
+  { clip: 'c3', src: 29.8, at: b(24), fx: ['punch'] },
+  { clip: 'c4', src: 20.4, at: b(25), fx: ['punch', 'shake'] },
+  { clip: 'c1', src: 18.0, at: b(26), fx: ['punch'] },
   { clip: 'c2', src: 31.5, at: b(27), tr: 'spin' },
   { clip: 'c3', src: 26.2, at: b(28), fx: ['flash', 'rgb', 'punch'] },
   { clip: 'c4', src: 14.4, at: b(29), fx: ['shake'], tr: 'zoom' },
@@ -123,7 +123,7 @@ const ShotView: React.FC<{ shot: Shot; dur: number; lead: number; exitTr: Tr; ex
   const ease = Easing.out(Easing.cubic);
 
   let scale = CROP[shot.clip];
-  if (fx.includes('punch')) scale *= interpolate(fb, [0, 7], [1.22, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: ease });
+  if (fx.includes('punch')) scale *= interpolate(fb, [0, 7], [fx.includes('flash') ? 1.22 : 1.1, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: ease });
   if (fx.includes('slow')) scale *= interpolate(f, [0, dur], [1, 1.12]);
   if (fx.includes('ramp')) scale *= interpolate(f, [0, dur * 0.4, dur], [1.0, 1.16, 1.08], { easing: Easing.inOut(Easing.quad) });
 
