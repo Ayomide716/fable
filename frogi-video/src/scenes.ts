@@ -27,6 +27,7 @@ export type Scene = {
   captionY: number; // caption position, % from top (kept clear of the app's own text)
   size?: number; // caption font size (default 92)
   captions: Caption[];
+  cleanCaptions?: Caption[]; // replaces `captions` in the grown-up (clean) version
 };
 
 export const SCENES: Scene[] = [
@@ -39,6 +40,7 @@ export const SCENES: Scene[] = [
       { text: 'POV: you open TikTok mid-debug…', at: 0, highlight: ['TikTok'] },
       { text: '…and a frog eats it.', at: 1.9, highlight: ['frog'] },
     ],
+    cleanCaptions: [{ text: 'Frogi had other plans.', at: 1.2 }],
   },
   {
     id: 'meet',
@@ -65,7 +67,7 @@ export const SCENES: Scene[] = [
     id: 'locked',
     clip: 'locked.mp4',
     seconds: 3,
-    captionY: 24,
+    captionY: 33,
     captions: [{ text: 'Go over it? Locked.', at: 0.2, highlight: ['Locked.'] }],
   },
   {
@@ -106,5 +108,17 @@ export const SCENES: Scene[] = [
   },
 ];
 
+// Grown-up version only: a short terminal intro before the first clip.
+export const INTRO_SECONDS = 3;
+export const INTRO_LINES = [
+  { text: '$ npm test', at: 0, color: '#e6edf3' },
+  { text: '  3 tests failing', at: 0.5, color: '#ff7b72' },
+  { text: '$ open tiktok --for "2 min"', at: 1.0, color: '#e6edf3', typed: true },
+];
+
+export type Variant = 'playful' | 'clean';
+
 export const sceneFrames = (s: Scene) => Math.round((s.seconds + (s.hold ?? 0)) * FPS);
 export const TOTAL_FRAMES = SCENES.reduce((n, s) => n + sceneFrames(s), 0);
+export const INTRO_FRAMES = Math.round(INTRO_SECONDS * FPS);
+export const totalFrames = (v: Variant) => TOTAL_FRAMES + (v === 'clean' ? INTRO_FRAMES : 0);

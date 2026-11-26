@@ -24,3 +24,21 @@ I'll drop it into `public/audio/` and re-render.
 - Turn on the platform's **Paid partnership** / **Branded content** label.
 - Add a trending sound inside TikTok/Instagram at low volume (don't bake music into the file).
 - Then reply to Facu with the post link.
+
+---
+
+# Grown-up version (`out/frogi-clean.mp4`, 35 s)
+
+Same idea, calmer delivery. Save as **voiceover-clean.mp3**.
+
+| Time | Line |
+|---|---|
+| 0:00 | "Three tests failing. So obviously… I open TikTok. For two minutes." |
+| 0:03 | (frog grabs TikTok) "Frogi had other plans." |
+| 0:07 | "It's an app that makes you earn your screen time." |
+| 0:10 | "You set a daily limit for every app that eats your time." |
+| 0:16 | "Go over it, and it's locked." |
+| 0:20 | "Want it back? Pick a mission." |
+| 0:23 | "Push-ups, squats, a walk… and it actually counts your reps." |
+| 0:28 | "Unlocked. Now back to the bug." |
+| 0:31 | "Link's in my bio, code [YOUR CODE]." |
