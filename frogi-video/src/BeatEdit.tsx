@@ -5,7 +5,6 @@ import {
   AbsoluteFill,
   Audio,
   Easing,
-  Freeze,
   OffthreadVideo,
   Sequence,
   continueRender,
@@ -25,8 +24,12 @@ export const EDIT_SECONDS = 27.0; // ends right before the next quiet dip in the
 const SERIF = 'EditSerif';
 
 type Clip = 'c1' | 'c2' | 'c3' | 'c4';
-type Fx = 'punch' | 'shake' | 'flash' | 'blur' | 'slow' | 'rgb' | 'ramp' | 'bw' | 'freeze';
-type Shot = { clip: Clip; src: number; at: number; fx?: Fx[]; rate?: number };
+type Fx = 'punch' | 'shake' | 'flash' | 'blur' | 'slow' | 'rgb' | 'ramp' | 'bw';
+// How the shot ENTERS. It starts a few frames before its beat so it lands exactly on the beat.
+type Tr = 'cut' | 'slideR' | 'slideL' | 'slideUp' | 'zoom' | 'spin' | 'fade';
+type Shot = { clip: Clip; src: number; at: number; fx?: Fx[]; rate?: number; tr?: Tr };
+
+const TR_LEN: Record<Tr, number> = { cut: 0, slideR: 6, slideL: 6, slideUp: 6, zoom: 6, spin: 7, fade: 10 };
 
 const b = (n: number) => DROP + n * BEAT;
 
@@ -36,37 +39,37 @@ const CROP: Record<Clip, number> = { c1: 1.13, c2: 1.13, c3: 1.36, c4: 1.36 };
 const SHOTS: Shot[] = [
   // Intro (black & white) while the text types out
   { clip: 'c3', src: 4.4, at: 0, fx: ['bw', 'slow'], rate: 0.7 },
-  // DROP: colour bursts in
+  // DROP: colour bursts in (hard cuts on the big hits, transitions in between)
   { clip: 'c4', src: 9.6, at: b(0), fx: ['flash', 'rgb', 'shake', 'punch'] },
-  { clip: 'c2', src: 3.0, at: b(1), fx: ['punch'] },
-  { clip: 'c3', src: 21.4, at: b(2), fx: ['rgb', 'punch'] },
-  { clip: 'c1', src: 6.0, at: b(3), fx: ['punch'] },
-  { clip: 'c4', src: 12.0, at: b(4), fx: ['shake', 'punch'] },
+  { clip: 'c2', src: 3.0, at: b(1), tr: 'slideR' },
+  { clip: 'c3', src: 21.4, at: b(2), fx: ['rgb'], tr: 'zoom' },
+  { clip: 'c1', src: 6.0, at: b(3), tr: 'slideL' },
+  { clip: 'c4', src: 12.0, at: b(4), fx: ['shake'], tr: 'slideUp' },
   // Dip in the song: let one shot breathe
-  { clip: 'c3', src: 14.2, at: b(5), fx: ['blur', 'slow'], rate: 0.75 },
+  { clip: 'c3', src: 14.2, at: b(5), fx: ['slow'], rate: 0.75, tr: 'fade' },
   // Back in
   { clip: 'c4', src: 24.0, at: b(8), fx: ['flash', 'rgb', 'shake', 'ramp'] },
-  { clip: 'c2', src: 9.0, at: b(9), fx: ['punch'] },
-  { clip: 'c3', src: 2.4, at: b(10), fx: ['punch'] },
-  { clip: 'c1', src: 15.0, at: b(11), fx: ['shake', 'punch'] },
+  { clip: 'c2', src: 9.0, at: b(9), tr: 'slideR' },
+  { clip: 'c3', src: 2.4, at: b(10), tr: 'spin' },
+  { clip: 'c1', src: 15.0, at: b(11), fx: ['shake'], tr: 'slideL' },
   { clip: 'c4', src: 28.6, at: b(12), fx: ['flash', 'rgb', 'punch'] },
-  { clip: 'c2', src: 24.0, at: b(13), fx: ['punch'] },
-  { clip: 'c3', src: 17.8, at: b(14), fx: ['shake', 'punch'] },
-  { clip: 'c1', src: 1.5, at: b(15), fx: ['punch'] },
+  { clip: 'c2', src: 24.0, at: b(13), tr: 'slideUp' },
+  { clip: 'c3', src: 17.8, at: b(14), fx: ['shake'], tr: 'zoom' },
+  { clip: 'c1', src: 1.5, at: b(15), tr: 'slideR' },
   { clip: 'c4', src: 4.6, at: b(16), fx: ['flash', 'rgb', 'ramp'] },
-  { clip: 'c2', src: 27.0, at: b(18), fx: ['punch'] },
-  { clip: 'c3', src: 7.2, at: b(19), fx: ['shake', 'punch'] },
-  { clip: 'c4', src: 10.6, at: b(20), fx: ['punch'] },
-  { clip: 'c1', src: 10.5, at: b(21), fx: ['punch'] },
+  { clip: 'c2', src: 27.0, at: b(18), tr: 'slideL' },
+  { clip: 'c3', src: 7.2, at: b(19), fx: ['shake'], tr: 'spin' },
+  { clip: 'c4', src: 10.6, at: b(20), tr: 'slideUp' },
+  { clip: 'c1', src: 10.5, at: b(21), tr: 'zoom' },
   { clip: 'c2', src: 30.0, at: b(22), fx: ['flash', 'rgb', 'ramp'] },
-  { clip: 'c3', src: 29.8, at: b(24), fx: ['punch'] },
-  { clip: 'c4', src: 20.4, at: b(25), fx: ['shake', 'punch'] },
-  { clip: 'c1', src: 18.0, at: b(26), fx: ['punch'] },
-  { clip: 'c2', src: 31.5, at: b(27), fx: ['punch'] },
+  { clip: 'c3', src: 29.8, at: b(24), tr: 'slideR' },
+  { clip: 'c4', src: 20.4, at: b(25), fx: ['shake'], tr: 'slideL' },
+  { clip: 'c1', src: 18.0, at: b(26), tr: 'slideUp' },
+  { clip: 'c2', src: 31.5, at: b(27), tr: 'spin' },
   { clip: 'c3', src: 26.2, at: b(28), fx: ['flash', 'rgb', 'punch'] },
-  { clip: 'c4', src: 14.4, at: b(29), fx: ['shake', 'punch'] },
-  // Outro: slow-mo on her biggest smile, then freeze
-  { clip: 'c4', src: 30.9, at: b(30), fx: ['flash', 'slow', 'freeze'], rate: 0.5 },
+  { clip: 'c4', src: 14.4, at: b(29), fx: ['shake'], tr: 'zoom' },
+  // Outro: smooth slow-mo on her biggest smile all the way to the end
+  { clip: 'c4', src: 30.6, at: b(30), fx: ['slow'], rate: 0.5, tr: 'fade' },
 ];
 
 const useSerif = () => {
@@ -89,6 +92,8 @@ const ChannelFilters: React.FC = () => (
     <filter id="ch-g">
       <feColorMatrix type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" />
     </filter>
+    <filter id="mb-x"><feGaussianBlur stdDeviation="38 0" /></filter>
+    <filter id="mb-y"><feGaussianBlur stdDeviation="0 38" /></filter>
     <filter id="ch-b">
       <feColorMatrix type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" />
     </filter>
@@ -105,26 +110,32 @@ const Video: React.FC<{ clip: Clip; src: number; rate: number; style?: React.CSS
   />
 );
 
-const ShotView: React.FC<{ shot: Shot; dur: number }> = ({ shot, dur }) => {
+const ShotView: React.FC<{ shot: Shot; dur: number; lead: number; exitTr: Tr; exitLen: number }> = ({
+  shot,
+  dur,
+  lead,
+  exitTr,
+  exitLen,
+}) => {
   const f = useCurrentFrame();
+  const fb = f - lead; // frames since this shot's beat
   const fx = shot.fx ?? [];
   const ease = Easing.out(Easing.cubic);
 
   let scale = CROP[shot.clip];
-  if (fx.includes('punch')) scale *= interpolate(f, [0, 7], [1.22, 1], { extrapolateRight: 'clamp', easing: ease });
+  if (fx.includes('punch')) scale *= interpolate(fb, [0, 7], [1.22, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: ease });
   if (fx.includes('slow')) scale *= interpolate(f, [0, dur], [1, 1.12]);
   if (fx.includes('ramp')) scale *= interpolate(f, [0, dur * 0.4, dur], [1.0, 1.16, 1.08], { easing: Easing.inOut(Easing.quad) });
 
   let dx = 0;
   let dy = 0;
   let rot = 0;
-  if (fx.includes('shake') && f < 9) {
-    const k = 1 - f / 9;
-    dx = (random(`x${shot.at}${f}`) - 0.5) * 44 * k;
-    dy = (random(`y${shot.at}${f}`) - 0.5) * 44 * k;
-    rot = (random(`r${shot.at}${f}`) - 0.5) * 3 * k;
+  if (fx.includes('shake') && fb >= 0 && fb < 9) {
+    const k = 1 - fb / 9;
+    dx = (random(`x${shot.at}${fb}`) - 0.5) * 44 * k;
+    dy = (random(`y${shot.at}${fb}`) - 0.5) * 44 * k;
+    rot = (random(`r${shot.at}${fb}`) - 0.5) * 3 * k;
   }
-  const blur = fx.includes('blur') ? interpolate(f, [0, 6], [18, 0], { extrapolateRight: 'clamp' }) : 0;
   const grade = fx.includes('bw')
     ? 'grayscale(1) contrast(1.25) brightness(1.02)'
     : 'contrast(1.08) saturate(1.18) brightness(1.04) sepia(0.06)';
@@ -135,24 +146,55 @@ const ShotView: React.FC<{ shot: Shot; dur: number }> = ({ shot, dur }) => {
   if (fx.includes('ramp')) {
     const video2 = <Video clip={shot.clip} src={shot.src + (rampSplit * 2.2) / EDIT_FPS} rate={0.55} />;
     video = f < rampSplit ? <Video clip={shot.clip} src={shot.src} rate={2.2} /> : <Sequence from={rampSplit} layout="none">{video2}</Sequence>;
-  } else if (fx.includes('freeze')) {
-    const playFrames = Math.round(dur * 0.55);
-    const v = <Video clip={shot.clip} src={shot.src} rate={shot.rate ?? 1} />;
-    video = f < playFrames ? v : <Freeze frame={playFrames}>{v}</Freeze>;
   } else {
     video = <Video clip={shot.clip} src={shot.src} rate={shot.rate ?? 1} />;
   }
 
-  // Colour split on the first frames of the shot.
-  const split = fx.includes('rgb') ? interpolate(f, [0, 7], [26, 0], { extrapolateRight: 'clamp' }) : 0;
+  const split = fx.includes('rgb') ? interpolate(fb, [0, 7], [26, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }) : 0;
+
+  // ── Transition in (lands on the beat) and out (pushed by the next shot) ──
+  const tr = shot.tr ?? 'cut';
+  const e = lead > 0 ? interpolate(f, [0, lead], [0, 1], { extrapolateRight: 'clamp', easing: ease }) : 1;
+  const q = exitLen > 0 ? interpolate(f, [dur - exitLen, dur], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: ease }) : 0;
+  let tx = 0;
+  let ty = 0;
+  let ts = 1;
+  let tr8 = 0;
+  let op = 1;
+  let mblur = '';
+  let soft = 0;
+  if (e < 1) {
+    if (tr === 'slideR') tx = (1 - e) * 1080;
+    if (tr === 'slideL') tx = -(1 - e) * 1080;
+    if (tr === 'slideUp') ty = (1 - e) * 1920;
+    if (tr === 'zoom') { ts = 1 + (1 - e) * 0.8; op = e; soft = (1 - e) * 14; }
+    if (tr === 'spin') { ts = 1 + (1 - e) * 0.5; tr8 = (1 - e) * -22; op = Math.min(1, e * 1.6); soft = (1 - e) * 10; }
+    if (tr === 'fade') op = e;
+    if (tr.startsWith('slide') && e < 0.9) mblur = tr === 'slideUp' ? 'url(#mb-y)' : 'url(#mb-x)';
+  }
+  if (q > 0) {
+    if (exitTr === 'slideR') tx = -q * 1080;
+    if (exitTr === 'slideL') tx = q * 1080;
+    if (exitTr === 'slideUp') ty = -q * 1920;
+    if (exitTr === 'zoom') { ts = 1 + q * 0.35; soft = q * 8; }
+    if (exitTr === 'spin') { ts = 1 + q * 0.3; tr8 = q * 18; soft = q * 6; }
+    if (exitTr.startsWith('slide') && q > 0.1 && q < 1) mblur = exitTr === 'slideUp' ? 'url(#mb-y)' : 'url(#mb-x)';
+  }
 
   return (
-    <AbsoluteFill style={{ background: 'black' }}>
+    <AbsoluteFill
+      style={{
+        background: 'black',
+        opacity: op,
+        transform: `translate(${tx}px, ${ty}px) rotate(${tr8}deg) scale(${ts})`,
+        filter: `${mblur} blur(${soft}px)`.trim(),
+      }}
+    >
       <AbsoluteFill
         style={{
           transformOrigin: '50% 38%',
           transform: `translate(${dx}px, ${dy}px) rotate(${rot}deg) scale(${scale})`,
-          filter: `blur(${blur}px) ${grade}`,
+          filter: grade,
         }}
       >
         {split > 0.5 ? (
@@ -169,7 +211,7 @@ const ShotView: React.FC<{ shot: Shot; dur: number }> = ({ shot, dur }) => {
         <AbsoluteFill style={{ background: 'linear-gradient(to top, rgba(12,4,24,0.92) 0%, rgba(12,4,24,0.55) 14%, transparent 30%)' }} />
       )}
       {fx.includes('flash') && (
-        <AbsoluteFill style={{ background: 'white', opacity: interpolate(f, [0, 6], [0.9, 0], { extrapolateRight: 'clamp' }) }} />
+        <AbsoluteFill style={{ background: 'white', opacity: interpolate(fb, [0, 6], [0.9, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }) }} />
       )}
     </AbsoluteFill>
   );
@@ -244,7 +286,8 @@ const Mine: React.FC = () => {
         fontSize: 120,
         color: 'white',
         opacity: t,
-        letterSpacing: interpolate(t, [0, 1], [18, 2]),
+        transform: `translateY(${(1 - t) * 90}px)`,
+        letterSpacing: 2,
         textShadow: '0 4px 40px rgba(0,0,0,0.6), 0 0 24px rgba(255,255,255,0.35)',
       }}
     >
@@ -277,11 +320,14 @@ export const BeatEdit: React.FC = () => {
     <AbsoluteFill style={{ background: 'black' }}>
       <ChannelFilters />
       {SHOTS.map((s, i) => {
-        const from = Math.round(s.at * EDIT_FPS);
-        const to = i < SHOTS.length - 1 ? Math.round(SHOTS[i + 1].at * EDIT_FPS) : total;
+        const lead = TR_LEN[s.tr ?? 'cut'];
+        const next = SHOTS[i + 1];
+        const from = Math.round(s.at * EDIT_FPS) - lead;
+        const to = next ? Math.round(next.at * EDIT_FPS) : total;
+        const exitTr = next?.tr ?? 'cut';
         return (
           <Sequence key={i} from={from} durationInFrames={to - from}>
-            <ShotView shot={s} dur={to - from} />
+            <ShotView shot={s} dur={to - from} lead={lead} exitTr={exitTr} exitLen={next ? TR_LEN[exitTr] : 0} />
           </Sequence>
         );
       })}
@@ -291,7 +337,7 @@ export const BeatEdit: React.FC = () => {
       <Sequence durationInFrames={dropFrame}>
         <Typing />
       </Sequence>
-      <Sequence from={outroFrame + 14}>
+      <Sequence from={outroFrame + 18}>
         <Mine />
       </Sequence>
       <AbsoluteFill style={{ background: 'black', opacity: fadeOut }} />
