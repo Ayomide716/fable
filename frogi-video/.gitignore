@@ -4,3 +4,4 @@ public/clips/*
 public/audio/*
 !public/clips/.gitkeep
 !public/audio/.gitkeep
+public/edit/*
