@@ -42,3 +42,22 @@ Same idea, calmer delivery. Save as **voiceover-clean.mp3**.
 | 0:23 | "Push-ups, squats, a walk… and it actually counts your reps." |
 | 0:28 | "Unlocked. Now back to the bug." |
 | 0:31 | "Link's in my bio, code [YOUR CODE]." |
+
+---
+
+# Pro version (`out/frogi-pro.mp4`, 32.5 s)
+
+Calm, confident, a little dry. Think product launch, not hype. Save as **voiceover-pro.mp3**.
+
+| Time | On screen | Line |
+|---|---|---|
+| 0:00 | "Two minutes on TikTok." | "I told myself: two minutes on TikTok." |
+| 0:02 | Frogi had other plans. | "Frogi had other plans." |
+| 0:04 | Earn your screen time back. | "It's an app that makes you earn your screen time back." |
+| 0:07 | Choose a daily limit. | "You choose a daily limit…" |
+| 0:10 | For every app that pulls you away. | "…for every app that pulls you away." |
+| 0:13 | Go over it, and it locks. | "Go over it, and it locks." |
+| 0:16 | Pick a mission. | "To get it back, you pick a mission." |
+| 0:19 | It counts every rep. | "And it counts every rep. No cheating." |
+| 0:24 | Now, back to work. | "Unlocked. Now, back to work." |
+| 0:27 | Use code YOUR CODE | "Link's in my bio. Use code [YOUR CODE]." |

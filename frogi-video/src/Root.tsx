@@ -1,6 +1,8 @@
 import React from 'react';
 import { Composition } from 'remotion';
 import { FrogiAd } from './FrogiAd';
+import { FrogiAdPro } from './Pro';
+import { PRO_TOTAL_FRAMES } from './proScenes';
 import { FPS, HEIGHT, WIDTH, totalFrames } from './scenes';
 
 export const Root: React.FC = () => (
@@ -25,5 +27,7 @@ export const Root: React.FC = () => (
       height={HEIGHT}
       defaultProps={{ variant: 'clean' as const }}
     />
+    {/* Pro: phone on a premium backdrop, editorial headlines */}
+    <Composition id="FrogiAdPro" component={FrogiAdPro} durationInFrames={PRO_TOTAL_FRAMES} fps={FPS} width={WIDTH} height={HEIGHT} />
   </>
 );
