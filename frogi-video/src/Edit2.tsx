@@ -24,6 +24,9 @@ const BEAT = 0.5; // ~117.5 BPM
 const DROP = 8.36;
 const BARS = [8.36, 12.38, 16.37, 20.36];
 const OUTRO = 22.31;
+// Every accent in the fast section (cuts) and the small hi-hat ticks between them (zoom bumps).
+const ACCENTS = [8.36, 8.61, 8.87, 9.36, 9.87, 10.1, 10.36, 10.61, 10.87, 11.12, 11.35, 11.87, 12.12, 12.38, 12.61, 12.86, 13.35, 13.86, 14.12, 14.37, 14.61, 14.86, 15.12, 15.37, 15.86, 16.37, 16.6, 16.86, 17.37, 17.86, 18.11, 18.37, 18.62, 18.88, 19.11, 19.37, 19.88, 20.36, 20.62, 20.87, 21.36, 21.87];
+const TICKS = [9.06, 9.61, 11.63, 13.05, 13.61, 16.11, 17.07, 17.62, 19.62, 20.11, 21.08, 21.62];
 
 const INTRO_H = 820; // cinematic letterbox height during the intro
 const BOX_H = 1080; // square frame after the drop
@@ -46,17 +49,6 @@ const POOL: Src[] = [
   P('c1', 7.5), P('c4', 24.6, 0.4), P('c2', 21.0), P('c3', 18.4, 0.38),
 ];
 
-// One 4-second phrase, mirroring the reference's rhythm.
-const BAR_TEMPLATE: { off: number; fx: Fx[] }[] = [
-  { off: 0, fx: ['punch'] },
-  { off: 0.5, fx: ['punch'] },
-  { off: 1.0, fx: ['blurIn'] },
-  { off: 1.5, fx: ['punch'] },
-  { off: 2.0, fx: ['punch'] },
-  { off: 2.5, fx: ['blurIn'] },
-  { off: 3.0, fx: ['punch'] },
-  { off: 3.5, fx: ['punch'] },
-];
 
 const SHOTS: Shot[] = (() => {
   let k = 0;
@@ -69,15 +61,15 @@ const SHOTS: Shot[] = (() => {
     { ...P('c4', 10.6, 0.38), at: 7.36, fx: ['blurIn'] },
     { ...P('c1', 6.6), at: 7.85, fx: ['blurIn'] },
   ];
-  for (const bar of BARS) {
-    for (const t of BAR_TEMPLATE) {
-      const at = bar + t.off;
-      if (at >= OUTRO - 0.01) break;
-      const s = next();
-      // Negative flash only on the main drop
-      out.push({ ...s, at, fx: bar === DROP && t.off === 0 ? ['neg', 'blurIn', 'punch'] : t.fx });
-    }
-  }
+  ACCENTS.forEach((at, i) => {
+    const base = next();
+    const pass = Math.floor(i / POOL.length);
+    const src = { ...base, src: base.src + pass * 0.8 };
+    // A phrase starts every 4 s: those cuts get the blur-in; the main drop also gets the negative flash.
+    const phraseStart = BARS.some((b) => Math.abs(b - at) < 0.02);
+    const fx: Fx[] = i === 0 ? ['neg', 'blurIn', 'punch'] : phraseStart ? ['blurIn', 'punch'] : i % 3 === 2 ? ['blurIn'] : ['punch'];
+    out.push({ ...src, at, fx });
+  });
   out.push({ ...P('c4', 30.9, 0.36), at: OUTRO, fx: ['slow', 'blurIn'], rate: 0.5 });
   return out;
 })();
@@ -225,9 +217,13 @@ export const Edit2: React.FC = () => {
   const f = useCurrentFrame();
   const total = Math.round(E2_SECONDS * FPS);
   const h = boxHeight(f);
+  const t = f / FPS;
+  const lastTick = TICKS.filter((x) => x <= t).pop();
+  const bump = lastTick === undefined ? 1 : interpolate(t - lastTick, [0, 0.13], [1.045, 1], { extrapolateRight: 'clamp', easing: Easing.out(Easing.quad) });
   return (
     <AbsoluteFill style={{ background: 'black' }}>
       <div style={{ position: 'absolute', left: 0, top: (1920 - h) / 2, width: 1080, height: h, overflow: 'hidden' }}>
+       <AbsoluteFill style={{ transform: `scale(${bump})` }}>
         {SHOTS.map((s, i) => {
           const from = Math.round(s.at * FPS);
           const to = i < SHOTS.length - 1 ? Math.round(SHOTS[i + 1].at * FPS) : total;
@@ -241,6 +237,7 @@ export const Edit2: React.FC = () => {
         <AbsoluteFill style={{ background: 'rgba(40,90,140,0.08)', mixBlendMode: 'soft-light' }} />
         <AbsoluteFill style={{ background: 'radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.4) 100%)' }} />
         <Panels />
+       </AbsoluteFill>
       </div>
       <Grain />
       <Sequence durationInFrames={Math.round(DROP * FPS)}>
