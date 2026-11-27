@@ -34,5 +34,7 @@ export const Root: React.FC = () => (
     {/* Beat-synced personal edit (media in public/edit/, not committed) */}
     <Composition id="BeatEdit" component={BeatEdit} durationInFrames={Math.round(EDIT_SECONDS * EDIT_FPS)} fps={EDIT_FPS} width={WIDTH} height={HEIGHT} />
     <Composition id="Edit2" component={Edit2} durationInFrames={Math.round(E2_SECONDS * E2_FPS)} fps={E2_FPS} width={WIDTH} height={HEIGHT} />
+    {/* Same edit with CapCut-style velocity (speed ramps + smooth slow-mo + motion blur + glow) */}
+    <Composition id="Edit2Velocity" component={Edit2} durationInFrames={Math.round(E2_SECONDS * E2_FPS)} fps={E2_FPS} width={WIDTH} height={HEIGHT} defaultProps={{ velocity: true }} />
   </>
 );

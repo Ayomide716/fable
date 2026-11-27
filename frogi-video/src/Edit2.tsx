@@ -6,6 +6,7 @@ import {
   AbsoluteFill,
   Audio,
   Easing,
+  Freeze,
   OffthreadVideo,
   Sequence,
   continueRender,
@@ -125,7 +126,49 @@ const Layer: React.FC<{ s: Src; rate?: number; h: number; scale: number; filter?
   );
 };
 
-const ShotView: React.FC<{ shot: Shot; dur: number; startFrame: number }> = ({ shot, dur, startFrame }) => {
+// ── Velocity mode ──
+// cXv.mp4 are 90 fps copies with generated in-between frames, so slow motion stays smooth.
+const V_FPS = 90;
+const VA = 0.4; // speed at the cut and at the end of a shot (hang on the beat)
+const VB = 2.4; // extra speed in the middle (the rush)
+const velSpeed = (u: number) => VA + VB * Math.sin(Math.PI * u) ** 2;
+const velOffset = (u: number, D: number) => D * (VA * u + VB * (u / 2 - Math.sin(2 * Math.PI * u) / (4 * Math.PI)));
+
+const VLayer: React.FC<{ s: Src; t: number; h: number; scale: number; filter?: string; style?: React.CSSProperties }> = ({ s, t, h, scale, filter, style }) => {
+  const vh = 1920 * scale;
+  const top = Math.min(0, Math.max(h - vh, h / 2 - s.focus * vh));
+  return (
+    <div style={{ position: 'absolute', left: (1080 - 1080 * scale) / 2, top, width: 1080 * scale, height: vh, filter, ...style }}>
+      <Freeze frame={Math.max(0, Math.round(t * V_FPS))}>
+        <OffthreadVideo src={staticFile(`edit/${s.clip}v.mp4`)} playbackRate={1 / 3} muted style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+      </Freeze>
+    </div>
+  );
+};
+
+const VelocityShot: React.FC<{ shot: Shot; dur: number; startFrame: number; scale: number; grade: string }> = ({ shot, dur, startFrame, scale, grade }) => {
+  const f = useCurrentFrame();
+  const h = boxHeight(startFrame + f);
+  const D = dur / FPS;
+  const u = Math.min(1, f / dur);
+  const constant = shot.fx.includes('slow');
+  const t = constant ? shot.src + (f / FPS) * (shot.rate ?? 1) : shot.src + velOffset(u, D);
+  const speed = constant ? shot.rate ?? 1 : velSpeed(u);
+  // Motion blur during the rush: blend in the previous frames.
+  const ghosts = speed > 1.4 ? [1, 2] : [];
+  return (
+    <>
+      <VLayer s={shot} t={t} h={h} scale={scale} filter={grade} />
+      {ghosts.map((k) => (
+        <VLayer key={k} s={shot} t={t - (k * speed) / V_FPS} h={h} scale={scale} filter={grade} style={{ opacity: k === 1 ? 0.35 : 0.2 }} />
+      ))}
+      {/* soft glow */}
+      <VLayer s={shot} t={t} h={h} scale={scale} filter="blur(22px) brightness(1.2) saturate(1.2)" style={{ mixBlendMode: 'screen', opacity: 0.22 }} />
+    </>
+  );
+};
+
+const ShotView: React.FC<{ shot: Shot; dur: number; startFrame: number; velocity?: boolean }> = ({ shot, dur, startFrame, velocity }) => {
   const f = useCurrentFrame();
   const h = boxHeight(startFrame + f);
   const fx = shot.fx;
@@ -143,7 +186,11 @@ const ShotView: React.FC<{ shot: Shot; dur: number; startFrame: number }> = ({ s
 
   return (
     <AbsoluteFill style={{ opacity, transform: `translateX(${driftX}px)` }}>
-      <Layer s={shot} rate={shot.rate} h={h} scale={scale} filter={grade} />
+      {velocity ? (
+        <VelocityShot shot={shot} dur={dur} startFrame={startFrame} scale={scale} grade={grade} />
+      ) : (
+        <Layer s={shot} rate={shot.rate} h={h} scale={scale} filter={grade} />
+      )}
       {shot.partner && fx.includes('splitH') && splitShow && (
         <div style={{ position: 'absolute', left: 0, right: 0, top: h / 2, height: h / 2, overflow: 'hidden' }}>
           <div style={{ position: 'absolute', left: 0, right: 0, top: -h / 2, height: h }}>
@@ -216,7 +263,7 @@ const Grain: React.FC = () => {
   );
 };
 
-export const Edit2: React.FC = () => {
+export const Edit2: React.FC<{ velocity?: boolean }> = ({ velocity = false }) => {
   useSerif();
   const f = useCurrentFrame();
   const total = Math.round(E2_SECONDS * FPS);
@@ -224,16 +271,21 @@ export const Edit2: React.FC = () => {
   const t = f / FPS;
   const lastTick = TICKS.filter((x) => x <= t).pop();
   const bump = lastTick === undefined ? 1 : interpolate(t - lastTick, [0, 0.13], [1.045, 1], { extrapolateRight: 'clamp', easing: Easing.out(Easing.quad) });
+  const lastBar = BARS.filter((b) => b <= t).pop();
+  const sk = velocity && lastBar !== undefined ? Math.max(0, 1 - (t - lastBar) / 0.3) : 0;
+  const shakeX = sk * 16 * Math.sin(f * 2.7);
+  const shakeY = sk * 12 * Math.cos(f * 3.3);
+  const shakeR = sk * 1.4 * Math.sin(f * 1.9);
   return (
     <AbsoluteFill style={{ background: 'black' }}>
       <div style={{ position: 'absolute', left: 0, top: (1920 - h) / 2, width: 1080, height: h, overflow: 'hidden' }}>
-       <AbsoluteFill style={{ transform: `scale(${bump})` }}>
+       <AbsoluteFill style={{ transform: `translate(${shakeX}px, ${shakeY}px) rotate(${shakeR}deg) scale(${bump * (sk > 0 ? 1.03 : 1)})` }}>
         {SHOTS.map((s, i) => {
           const from = Math.round(s.at * FPS);
           const to = i < SHOTS.length - 1 ? Math.round(SHOTS[i + 1].at * FPS) : total;
           return (
             <Sequence key={i} from={from} durationInFrames={to - from}>
-              <ShotView shot={s} dur={to - from} startFrame={from} />
+              <ShotView shot={s} dur={to - from} startFrame={from} velocity={velocity} />
             </Sequence>
           );
         })}
