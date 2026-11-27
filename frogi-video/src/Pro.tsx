@@ -87,7 +87,7 @@ const Screen: React.FC<{ scene: ProScene; index: number }> = ({ scene, index }) 
   const play = Math.round(scene.seconds * fps);
   const path = `clips/${scene.clip}`;
   const opacity = index === 0 ? 1 : interpolate(frame, [0, XFADE], [0, 1], { extrapolateRight: 'clamp' });
-  const video = <OffthreadVideo src={staticFile(path)} muted style={{ width: '100%', height: '100%', objectFit: 'cover' }} />;
+  const video = <OffthreadVideo src={staticFile(path)} playbackRate={scene.rate ?? 1} muted style={{ width: '100%', height: '100%', objectFit: 'cover' }} />;
   if (!hasFile(path)) return <AbsoluteFill style={{ background: '#222' }} />;
   return <AbsoluteFill style={{ opacity }}>{frame < play ? video : <Freeze frame={play - 1}>{video}</Freeze>}</AbsoluteFill>;
 };
@@ -97,7 +97,7 @@ const Phone: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const pullStart = Math.round(FULL_BLEED_SECONDS * fps);
-  const p = interpolate(frame, [pullStart, pullStart + 26], [0, 1], { easing: EASE, extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  const p = interpolate(frame, [pullStart, pullStart + 40], [0, 1], { easing: EASE, extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
 
   const scale = 1 + (1 - p) * (FULL_SCALE - 1);
   const shiftY = (1 - p) * (960 - SCREEN_CENTER_Y);
@@ -242,7 +242,7 @@ const Headline: React.FC<{ scene: ProScene; duration: number; keepEyebrowIn: boo
 const HookText: React.FC<{ duration: number }> = ({ duration }) => {
   const frame = useCurrentFrame();
   const t = interpolate(frame, [0, 14], [0, 1], { extrapolateRight: 'clamp', easing: EASE });
-  const out = interpolate(frame, [duration - 8, duration], [1, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  const out = interpolate(frame, [duration - 12, duration], [1, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
   return (
     <div style={{ position: 'absolute', top: 560, left: 60, right: 60, textAlign: 'center', overflow: 'hidden' }}>
       <div
@@ -274,8 +274,8 @@ export const FrogiAdPro: React.FC = () => {
     <AbsoluteFill>
       <Backdrop />
       <Phone />
-      <Sequence from={4} durationInFrames={hookEnd - 4}>
-        <HookText duration={hookEnd - 4} />
+      <Sequence from={4} durationInFrames={hookEnd}>
+        <HookText duration={hookEnd} />
       </Sequence>
       {PRO_SCENES.map((s, i) => {
         const delay = Math.round((s.headlineAt ?? 0) * fps);
