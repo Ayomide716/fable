@@ -26,8 +26,7 @@ const BARS = [8.36, 12.38, 16.37, 20.36];
 const OUTRO = 22.31;
 // Every accent in the fast section (cuts) and the small hi-hat ticks between them (zoom bumps).
 const ACCENTS = [8.36, 8.61, 8.87, 9.36, 9.87, 10.1, 10.36, 10.61, 10.87, 11.12, 11.35, 11.87, 12.12, 12.38, 12.61, 12.86, 13.35, 13.86, 14.12, 14.37, 14.61, 14.86, 15.12, 15.37, 15.86, 16.37, 16.6, 16.86, 17.37, 17.86, 18.11, 18.37, 18.62, 18.88, 19.11, 19.37, 19.88, 20.36, 20.62, 20.87, 21.36, 21.87];
-// only inside the longer shots, so the quick cuts stay clean
-const TICKS = [9.06, 11.63, 13.05, 16.11, 17.07, 19.62, 20.11, 21.08];
+const TICKS = [9.06, 9.61, 11.63, 13.05, 13.61, 16.11, 17.07, 17.62, 19.62, 20.11, 21.08, 21.62];
 
 const INTRO_H = 820; // cinematic letterbox height during the intro
 const BOX_H = 1080; // square frame after the drop
@@ -62,24 +61,16 @@ const SHOTS: Shot[] = (() => {
     { ...P('c4', 10.6, 0.38), at: 7.36, fx: ['blurIn'] },
     { ...P('c1', 6.6), at: 7.85, fx: ['blurIn'] },
   ];
-  // Each 4 s phrase: a longer slow-mo shot, beat cuts, a quick double-cut on a syncopated hit, a longer shot to close.
-  const PHRASE: { off: number; fx: Fx[]; rate?: number }[] = [
-    { off: 0, fx: ['blurIn', 'slow'], rate: 0.7 },
-    { off: 1.0, fx: ['punch'] },
-    { off: 1.5, fx: ['driftL'] },
-    { off: 2.0, fx: ['punch'] },
-    { off: 2.5, fx: ['pull'] },
-    { off: 2.75, fx: ['punch'] },
-    { off: 3.0, fx: ['driftR', 'slow'], rate: 0.8 },
-  ];
-  BARS.forEach((bar, bi) => {
-    PHRASE.forEach((p, pi) => {
-      const raw = bar + p.off;
-      const at = ACCENTS.find((a) => Math.abs(a - raw) < 0.06) ?? raw; // snap to the real accent
-      if (at >= OUTRO - 0.01) return;
-      const fx: Fx[] = bi === 0 && pi === 0 ? ['neg', ...p.fx] : p.fx;
-      out.push({ ...next(), at, fx, rate: p.rate });
-    });
+  // Cuts: every main beat, plus the two strongest syncopated hits in each 4 s phrase.
+  const beats: number[] = [];
+  for (let t = DROP; t < OUTRO - 0.01; t += BEAT) beats.push(t);
+  const extras = BARS.flatMap((b) => [b + 0.25, b + 2.75]);
+  const raw = [...beats, ...extras].filter((t) => t < OUTRO - 0.01).sort((x, y) => x - y);
+  const cuts = raw.map((t) => ACCENTS.find((a) => Math.abs(a - t) < 0.07) ?? t);
+  cuts.forEach((at, i) => {
+    const phraseStart = BARS.some((b) => Math.abs(b - at) < 0.05);
+    const fx: Fx[] = i === 0 ? ['neg', 'blurIn', 'punch'] : phraseStart ? ['blurIn', 'punch'] : i % 4 === 3 ? ['blurIn'] : ['punch'];
+    out.push({ ...next(), at, fx });
   });
   out.push({ ...P('c4', 30.9, 0.36), at: OUTRO, fx: ['slow', 'blurIn'], rate: 0.5 });
   return out;
@@ -138,7 +129,7 @@ const ShotView: React.FC<{ shot: Shot; dur: number; startFrame: number }> = ({ s
   const f = useCurrentFrame();
   const h = boxHeight(startFrame + f);
   const fx = shot.fx;
-  let scale = 1.08;
+  let scale = 1.04;
   if (fx.includes('punch')) scale *= interpolate(f, [0, 7], [1.1, 1], { extrapolateRight: 'clamp', easing: Easing.out(Easing.cubic) });
   if (fx.includes('slow')) scale *= interpolate(f, [0, dur], [1, 1.1]);
   if (fx.includes('blurIn')) scale *= interpolate(f, [0, 4], [1.06, 1], { extrapolateRight: 'clamp' });
