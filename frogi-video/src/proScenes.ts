@@ -3,7 +3,7 @@
 // ─────────────────────────────────────────────────────────────
 //  Headline lines are separated by \n. Wrap words in [brackets] to colour them green.
 
-import { CREATOR_CODE, FPS } from './scenes';
+import { FPS } from './scenes';
 
 export type ProScene = {
   id: string;
@@ -28,14 +28,7 @@ export const PRO_SCENES: ProScene[] = [
   { id: 'mission', clip: 'pick-a-mission.mp4', seconds: 3, eyebrow: '03 · Earn it back', headline: 'Pick a\n[mission.]' },
   { id: 'counts', clip: 'camera-counts.mp4', seconds: 4.8, eyebrow: '03 · Earn it back', headline: 'It counts\nevery [rep.]' },
   { id: 'unlocked', clip: 'unlocked.mp4', seconds: 3, eyebrow: 'Unlocked', headline: 'Now, back\nto [work.]' },
-  {
-    id: 'cta',
-    clip: 'link-in-bio.mp4',
-    seconds: 3.6,
-    hold: 1.6,
-    eyebrow: 'Link in bio',
-    headline: `Use code\n[${CREATOR_CODE.replace(/ /g, ' ')}]`,
-  },
+  { id: 'cta', clip: 'link-in-bio.mp4', seconds: 3.6, hold: 1.6, eyebrow: 'Try Frogi', headline: 'Link in\n[bio.]' },
 ];
 
 export const XFADE = 8; // frames of cross-dissolve between screens
