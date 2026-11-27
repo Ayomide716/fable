@@ -46,7 +46,7 @@ const POOL: Src[] = [
   P('c4', 12.0, 0.38), P('c2', 27.0, 0.35), P('c3', 7.2, 0.38), P('c1', 10.5, 0.33), P('c4', 4.6), P('c2', 30.0, 0.4),
   P('c3', 29.8, 0.4), P('c1', 18.0), P('c4', 20.4, 0.38), P('c2', 31.5, 0.38), P('c3', 14.2, 0.38), P('c1', 13.5),
   P('c4', 14.4, 0.38), P('c2', 13.5), P('c3', 26.2, 0.38), P('c1', 3.0), P('c4', 10.8, 0.38), P('c2', 16.5),
-  P('c3', 25.2, 0.38), P('c1', 19.5), P('c2', 4.5, 0.33), P('c4', 31.2, 0.38), P('c3', 4.8, 0.38), P('c2', 36.0),
+  P('c3', 25.2, 0.38), P('c1', 19.5), P('c2', 4.5, 0.33), P('c4', 26.4, 0.38), P('c3', 4.8, 0.38), P('c2', 36.0),
   P('c1', 7.5), P('c4', 24.6, 0.4), P('c2', 21.0), P('c3', 18.4, 0.38),
 ];
 
@@ -129,8 +129,8 @@ const Layer: React.FC<{ s: Src; rate?: number; h: number; scale: number; filter?
 // ── Velocity mode ──
 // cXv.mp4 are 90 fps copies with generated in-between frames, so slow motion stays smooth.
 const V_FPS = 90;
-const VA = 0.4; // speed at the cut and at the end of a shot (hang on the beat)
-const VB = 2.4; // extra speed in the middle (the rush)
+const VA = 0.7; // speed at the cut and at the end of a shot (a light hang on the beat)
+const VB = 1.9; // extra speed in the middle (the rush)
 const velSpeed = (u: number) => VA + VB * Math.sin(Math.PI * u) ** 2;
 const velOffset = (u: number, D: number) => D * (VA * u + VB * (u / 2 - Math.sin(2 * Math.PI * u) / (4 * Math.PI)));
 
@@ -158,12 +158,12 @@ const VelocityShot: React.FC<{ shot: Shot; dur: number; startFrame: number; scal
   const ghosts = speed > 1.4 ? [1, 2] : [];
   return (
     <>
-      <VLayer s={shot} t={t} h={h} scale={scale} filter={grade} />
+      <VLayer s={shot} t={t} h={h} scale={scale * (1 + 0.05 * u)} filter={grade} />
       {ghosts.map((k) => (
-        <VLayer key={k} s={shot} t={t - (k * speed) / V_FPS} h={h} scale={scale} filter={grade} style={{ opacity: k === 1 ? 0.35 : 0.2 }} />
+        <VLayer key={k} s={shot} t={t - (k * speed) / V_FPS} h={h} scale={scale * (1 + 0.05 * u)} filter={grade} style={{ opacity: k === 1 ? 0.35 : 0.2 }} />
       ))}
       {/* soft glow */}
-      <VLayer s={shot} t={t} h={h} scale={scale} filter="blur(22px) brightness(1.2) saturate(1.2)" style={{ mixBlendMode: 'screen', opacity: 0.22 }} />
+      <VLayer s={shot} t={t} h={h} scale={scale * (1 + 0.05 * u)} filter="blur(22px) brightness(1.2) saturate(1.2)" style={{ mixBlendMode: 'screen', opacity: 0.22 }} />
     </>
   );
 };
