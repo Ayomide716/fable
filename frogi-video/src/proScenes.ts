@@ -16,11 +16,11 @@ export type ProScene = {
 };
 
 // The video opens full-screen on the first clip, then pulls back into the phone.
-export const FULL_BLEED_SECONDS = 2.2;
+export const FULL_BLEED_SECONDS = 2.7;
 export const HOOK_TEXT = 'Two minutes on TikTok.';
 
 export const PRO_SCENES: ProScene[] = [
-  { id: 'hook', clip: 'the-catch.mp4', seconds: 4, eyebrow: 'Frogi', headline: 'Had other\n[plans.]', headlineAt: 2.3 },
+  { id: 'hook', clip: 'the-catch.mp4', seconds: 4, hold: 0.6, eyebrow: 'Frogi', headline: 'Had other\n[plans.]', headlineAt: 2.85 },
   { id: 'meet', clip: 'meet-frogi.mp4', seconds: 3, eyebrow: 'Meet Frogi', headline: 'Earn your\nscreen time [back.]' },
   { id: 'limit', clip: 'set-a-limit.mp4', seconds: 3, eyebrow: '01 · Set limits', headline: 'Choose a\n[daily limit.]' },
   { id: 'rules', clip: 'pond-rules.mp4', seconds: 3.5, eyebrow: '01 · Set limits', headline: 'For every app that\npulls you [away.]' },
