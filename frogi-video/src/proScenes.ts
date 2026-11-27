@@ -29,7 +29,7 @@ export const PRO_SCENES: ProScene[] = [
   { id: 'mission', clip: 'pick-a-mission.mp4', seconds: 3, eyebrow: '03 · Earn it back', headline: 'Pick a\n[mission.]' },
   { id: 'counts', clip: 'camera-counts.mp4', seconds: 4.8, eyebrow: '03 · Earn it back', headline: 'It counts\nevery [rep.]' },
   { id: 'unlocked', clip: 'unlocked.mp4', seconds: 3, eyebrow: 'Unlocked', headline: 'Now, back\nto [work.]' },
-  { id: 'cta', clip: 'link-in-bio.mp4', seconds: 3.6, hold: 1.6, eyebrow: 'Try Frogi', headline: 'Link in\n[bio.]' },
+  { id: 'cta', clip: 'link-in-bio.mp4', seconds: 3.6, hold: 1.6, eyebrow: 'Wanna try it yourself?', headline: 'Link in\n[bio.]' },
 ];
 
 export const XFADE = 8; // frames of cross-dissolve between screens
