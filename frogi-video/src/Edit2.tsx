@@ -48,14 +48,14 @@ const POOL: Src[] = [
 
 // One 4-second phrase, mirroring the reference's rhythm.
 const BAR_TEMPLATE: { off: number; fx: Fx[] }[] = [
-  { off: 0, fx: ['neg', 'blurIn', 'punch'] },
-  { off: 0.5, fx: ['blurIn'] },
-  { off: 1.0, fx: ['punch'] },
-  { off: 1.5, fx: ['splitH'] },
-  { off: 2.0, fx: ['blurIn'] },
-  { off: 2.25, fx: ['splitV'] },
-  { off: 2.5, fx: ['punch'] },
-  { off: 3.0, fx: ['blurIn'] },
+  { off: 0, fx: ['punch'] },
+  { off: 0.5, fx: ['punch'] },
+  { off: 1.0, fx: ['blurIn'] },
+  { off: 1.5, fx: ['punch'] },
+  { off: 2.0, fx: ['punch'] },
+  { off: 2.5, fx: ['blurIn'] },
+  { off: 3.0, fx: ['punch'] },
+  { off: 3.5, fx: ['punch'] },
 ];
 
 const SHOTS: Shot[] = (() => {
@@ -74,7 +74,8 @@ const SHOTS: Shot[] = (() => {
       const at = bar + t.off;
       if (at >= OUTRO - 0.01) break;
       const s = next();
-      out.push({ ...s, at, fx: t.fx, partner: t.fx.some((f) => f.startsWith('split')) ? next() : undefined });
+      // Negative flash only on the main drop
+      out.push({ ...s, at, fx: bar === DROP && t.off === 0 ? ['neg', 'blurIn', 'punch'] : t.fx });
     }
   }
   out.push({ ...P('c4', 30.9, 0.36), at: OUTRO, fx: ['slow', 'blurIn'], rate: 0.5 });
@@ -83,7 +84,7 @@ const SHOTS: Shot[] = (() => {
 
 // Half-panel white flashes: left, right, top, bottom on the last half-beat of each phrase.
 const PANELS: { at: number; side: 'L' | 'R' | 'T' | 'B' }[] = [];
-for (const s of [DROP - BEAT, ...BARS.slice(1).map((b) => b - BEAT)]) {
+for (const s of [] as number[]) { // panel flashes switched off
   (['L', 'R', 'T', 'B'] as const).forEach((side, i) => PANELS.push({ at: s + i * 0.125, side }));
 }
 
@@ -135,7 +136,7 @@ const ShotView: React.FC<{ shot: Shot; dur: number; startFrame: number }> = ({ s
   const h = boxHeight(startFrame + f);
   const fx = shot.fx;
   let scale = 1.04;
-  if (fx.includes('punch')) scale *= interpolate(f, [0, 6], [1.12, 1], { extrapolateRight: 'clamp', easing: Easing.out(Easing.cubic) });
+  if (fx.includes('punch')) scale *= interpolate(f, [0, 7], [1.1, 1], { extrapolateRight: 'clamp', easing: Easing.out(Easing.cubic) });
   if (fx.includes('slow')) scale *= interpolate(f, [0, dur], [1, 1.1]);
   if (fx.includes('blurIn')) scale *= interpolate(f, [0, 4], [1.06, 1], { extrapolateRight: 'clamp' });
   const blur = fx.includes('blurIn') ? interpolate(f, [0, 3], [14, 0], { extrapolateRight: 'clamp' }) : 0;
