@@ -3,6 +3,7 @@ import { Composition } from 'remotion';
 import { FrogiAd } from './FrogiAd';
 import { FrogiAdPro } from './Pro';
 import { BeatEdit, EDIT_FPS, EDIT_SECONDS } from './BeatEdit';
+import { Edit2, E2_FPS, E2_SECONDS } from './Edit2';
 import { PRO_TOTAL_FRAMES } from './proScenes';
 import { FPS, HEIGHT, WIDTH, totalFrames } from './scenes';
 
@@ -32,5 +33,6 @@ export const Root: React.FC = () => (
     <Composition id="FrogiAdPro" component={FrogiAdPro} durationInFrames={PRO_TOTAL_FRAMES} fps={FPS} width={WIDTH} height={HEIGHT} />
     {/* Beat-synced personal edit (media in public/edit/, not committed) */}
     <Composition id="BeatEdit" component={BeatEdit} durationInFrames={Math.round(EDIT_SECONDS * EDIT_FPS)} fps={EDIT_FPS} width={WIDTH} height={HEIGHT} />
+    <Composition id="Edit2" component={Edit2} durationInFrames={Math.round(E2_SECONDS * E2_FPS)} fps={E2_FPS} width={WIDTH} height={HEIGHT} />
   </>
 );
