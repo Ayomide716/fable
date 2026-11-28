@@ -267,7 +267,10 @@ export const BuildIt: React.FC = () => {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
   const t = f / fps;
-  const angle = (t / 3) * 360; // spin 3s linear infinite
+  // The border only spins once step 5 (@property + @keyframes) is finished; before that it stays still.
+  const spinStart = STEPS[4].end;
+  const spinning = t < HOOK_END || t >= spinStart;
+  const angle = spinning ? (((t < HOOK_END ? t : t - spinStart) / 3) * 360) % 360 : 0;
   const total = Math.round(BUILD_SECONDS * fps);
 
   const hook = t < HOOK_END;
