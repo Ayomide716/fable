@@ -1,0 +1,46 @@
+{
+ "fps": 30,
+ "steps": [
+  {
+   "file": "index.html",
+   "caption": "Add the HTML",
+   "dur": 1.6,
+   "code": "<div class=\"card\">\n  <h2>Coding Wizard</h2>\n</div>",
+   "start": 2.0,
+   "end": 3.6
+  },
+  {
+   "file": "style.css",
+   "caption": "Style the card",
+   "dur": 4.2,
+   "code": ".card {\n  position: relative;\n  width: 300px;\n  height: 400px;\n  background: #111;\n  border-radius: 16px;\n  display: grid;\n  place-items: center;\n  color: white;\n}",
+   "start": 4.15,
+   "end": 8.35
+  },
+  {
+   "file": "style.css",
+   "caption": "Add the rainbow border",
+   "dur": 6.0,
+   "code": ".card::before,\n.card::after {\n  content: \"\";\n  position: absolute;\n  inset: -4px;\n  z-index: -1;\n  border-radius: 20px;\n  background: conic-gradient(from var(--angle),\n    #ff0080, #7928ca, #00d4ff, #ff0080);\n  animation: spin 3s linear infinite;\n}",
+   "start": 8.9,
+   "end": 14.9
+  },
+  {
+   "file": "style.css",
+   "caption": "Make it glow",
+   "dur": 1.6,
+   "code": ".card::after {\n  filter: blur(30px);\n}",
+   "start": 15.45,
+   "end": 17.05
+  },
+  {
+   "file": "style.css",
+   "caption": "Make it spin",
+   "dur": 3.6,
+   "code": "@property --angle {\n  syntax: \"<angle>\";\n  initial-value: 0deg;\n  inherits: false;\n}\n@keyframes spin {\n  to { --angle: 360deg; }\n}",
+   "start": 17.6,
+   "end": 21.2
+  }
+ ],
+ "typingEnd": 21.75
+}
