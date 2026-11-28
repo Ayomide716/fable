@@ -5,3 +5,4 @@ public/audio/*
 !public/clips/.gitkeep
 !public/audio/.gitkeep
 public/edit/*
+public/tut/*

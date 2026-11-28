@@ -4,6 +4,7 @@ import { FrogiAd } from './FrogiAd';
 import { FrogiAdPro } from './Pro';
 import { BeatEdit, EDIT_FPS, EDIT_SECONDS } from './BeatEdit';
 import { Edit2, E2_FPS, E2_SECONDS } from './Edit2';
+import { BannerTutorial, TUT_FPS, TUT_TOTAL } from './Tutorial';
 import { PRO_TOTAL_FRAMES } from './proScenes';
 import { FPS, HEIGHT, WIDTH, totalFrames } from './scenes';
 
@@ -36,5 +37,6 @@ export const Root: React.FC = () => (
     <Composition id="Edit2" component={Edit2} durationInFrames={Math.round(E2_SECONDS * E2_FPS)} fps={E2_FPS} width={WIDTH} height={HEIGHT} />
     {/* Same edit with CapCut-style velocity (speed ramps + smooth slow-mo + motion blur + glow) */}
     <Composition id="Edit2Velocity" component={Edit2} durationInFrames={Math.round(E2_SECONDS * E2_FPS)} fps={E2_FPS} width={WIDTH} height={HEIGHT} defaultProps={{ velocity: true }} />
+    <Composition id="BannerTutorial" component={BannerTutorial} durationInFrames={TUT_TOTAL} fps={TUT_FPS} width={WIDTH} height={HEIGHT} />
   </>
 );
